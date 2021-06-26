@@ -3,24 +3,19 @@ import pandas as pd
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error as MSE
-# import category_encoders as ce
 from sklearn import tree
 import matplotlib.pyplot as plt
-# from dtreeviz.trees import dtreeviz
 import seaborn as sns
 
 price_df = pd.read_csv("rubberprice.csv")
 price_df = price_df.drop(['Change','Price_rs','Change_dollar'], axis = 1)
 # price_df = df[['Month','Rubber_type','Year','Price_rs']]
 
-# cat_df_flights_onehot = cat_df_flights.copy()
+
 price_df = pd.get_dummies(price_df, columns=['Rubber_type'], prefix=['Rubber_type'])
 
 # pd.set_option('display.max_columns', None)
 # print(price_df.head())
-
-
-
 # print(x.head())
 # print(x.info())
 # print(x.shape)
@@ -51,8 +46,7 @@ final_df['Price_crude'] = final_df['Price_crude'].str.replace(',', '').astype('f
 # print(final_df.columns)
 # print(final_df.info())
 
-# X = final_df[['Month', 'Rubber_type', 'Year', 'Price_crude','Price_dollar', 'Production_tonne','Consumption', 'Import_tonne','Export_tonne']]
-# X = final_df[['Rubber_type', 'Price_crude','Price_dollar', 'Production_tonne','Consumption', 'Import_tonne','Export_tonne']]
+
 X = final_df[['Rubber_type_ISNR50', 'Rubber_type_RSS1',
        'Rubber_type_RSS4', 'Price_crude', 'Price_dollar', 'Production_tonne',
        'Consumption', 'Import_tonne', 'Export_tonne']]
@@ -81,7 +75,7 @@ dt.fit(X_train, y_train)
 y_predict_train = dt.predict(X_train) #predict using training set
 y_predict_test = dt.predict(X_test) #predict using test set
 
-price = dt.predict([[0, 1, 0, 3263.0, 72.534, 53000.0, 102500.0, 31368.0, 1139.0]])
+price = dt.predict([[0, 1, 0, 3263.0, 72.534, 53000.0, 102500.0, 31368.0, 1139.0]]) #predict for a single input data
 print("Price of rubber:")
 print(price)
 
@@ -91,53 +85,6 @@ tree.plot_tree(dt, filled=True, feature_names=X_train.columns, class_names=y_tra
 fig.savefig("decision_tree1.png")
 plt.show()
 
-
-
-
-
-# plt.xlabel("dollar price") #x label
-# plt.ylabel("rubber price in dollar") #y label
-# plt.scatter(X_train.Price_dollar, y_train)
-# plt.show()
-
-# sns.regplot(x=X_train.Price_dollar, y=y_train, color='red')
-# plt.show()
-
-
-# print('CV MSE: {:.2f}'.format(MSE_CV.mean()))
-#
-# print('Train MSE: {:.2f}'.format(MSE(y_train, y_predict_train)))
-#
-# print('Test MSE: {:.2f}'.format(MSE(y_test, y_predict_test)))
-
-
-
-
-
-
-
-
-# from sklearn import linear_model
-#
-# lr = linear_model.LinearRegression()
-# lr.fit(X, y)
-# # Predict test set labels
-# y_pred_lr = lr.predict(X_test)
-#
-# # Compute mse_lr
-# mse_lr = MSE(y_test, y_pred_lr)
-#
-# # Compute rmse_lr
-# rmse_lr = mse_lr**(1/2)
-#
-# print('Linear Regression test set RMSE: {:.2f}'.format(rmse_lr))
-#
-# from sklearn.metrics import mean_absolute_percentage_error
-# testset_error = mean_absolute_percentage_error(y_test, y_predict_test)
-# print(testset_error)
-#
-# trainset_error = mean_absolute_percentage_error(y_train, y_predict_train)
-# print(trainset_error)
 
 
 
